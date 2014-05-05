@@ -1,0 +1,41 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-ftp="http://www.springframework.org/schema/integration/ftp"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration/ftp http://www.springframework.org/schema/integration/ftp/spring-integration-ftp.xsd">
+
+
+    <bean id="ftpClientFactory" class="org.springframework.integration.ftp.session.DefaultFtpSessionFactory">
+        <property name="host" value="192.168.1.37"/>
+        <property name="port" value="21"/>
+        <property name="username" value="aman"/>
+        <property name="password" value="jftdefault"/>
+    </bean>
+
+    <int-ftp:inbound-channel-adapter id="ftpInbound"
+                                     channel="ftpChannel"
+                                     session-factory="ftpClientFactory"
+                                     filename-pattern="*.txt"
+                                     auto-create-local-directory="true"
+                                     delete-remote-files="false"
+                                     remote-directory="/home/aman/server"
+                                     local-directory="/home/aman/test">
+        <int:poller fixed-rate="10000"/>
+    </int-ftp:inbound-channel-adapter>
+
+    <int:channel id="ftpChannel">
+        <int:queue/>
+    </int:channel>
+
+
+    <int:channel id="outFtpChannel"/>
+
+    <int-ftp:outbound-channel-adapter id="ftpOutbound" channel="outFtpChannel" remote-directory="/home/aman/server"
+                                      use-temporary-file-name="false" session-factory="ftpClientFactory"/>
+
+
+</beans>
