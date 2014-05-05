@@ -15,7 +15,7 @@ class TransferController {
 
     def upload() {
         println "${params.path}--------------"
-        println "==========Aman========="
+        println "==========Aman=========revert 1 revert 2"
         String path = params.path ?: "/home/aman/test/"
         FilenameFilter filter = new FilenameFilter() {
             public boolean accept(File directory, String fileName) {
