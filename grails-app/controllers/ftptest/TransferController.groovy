@@ -14,7 +14,8 @@ class TransferController {
     }
 
     def upload() {
-        println "${params.path}"
+        println "${params.path}--------------"
+        println "==================="
         String path = params.path ?: "/home/aman/test/"
         FilenameFilter filter = new FilenameFilter() {
             public boolean accept(File directory, String fileName) {
@@ -24,5 +25,9 @@ class TransferController {
         File[] fileList = new File(path).listFiles(filter);
         flash.message = ftpFileTransferService.upload(fileList)
         redirect(uri: '/')
+    }
+
+    def test(){
+        render "hello"
     }
 }
